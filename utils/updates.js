@@ -97,7 +97,11 @@ module.exports = {
       await pause()
 
       for (const chall of page) {
-        await module.exports.fetchChallenge(chall.id_challenge, channelIds)
+        const alreadyAdded = await mongoose.models.challenge.find({"id_challenge" : parseInt(chall.id_challenge)})
+        if(alreadyAdded === null)
+        {
+          await module.exports.fetchChallenge(chall.id_challenge, channelIds)
+        }
       }
 
       if (req.data?.[1]?.rel !== 'next' && req.data?.[2]?.rel !== 'next') fetchContinue = false
